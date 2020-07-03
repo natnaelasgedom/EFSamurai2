@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSamurai", "EFSamurai\EFSamurai.csproj", "{92CFB831-4F99-449E-A28C-F9F637045C11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSamurai.Data", "EFSamurai.Data\EFSamurai.Data.csproj", "{20825C92-8061-4CED-8DDF-938BF2196DFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92CFB831-4F99-449E-A28C-F9F637045C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92CFB831-4F99-449E-A28C-F9F637045C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92CFB831-4F99-449E-A28C-F9F637045C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92CFB831-4F99-449E-A28C-F9F637045C11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20825C92-8061-4CED-8DDF-938BF2196DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20825C92-8061-4CED-8DDF-938BF2196DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20825C92-8061-4CED-8DDF-938BF2196DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20825C92-8061-4CED-8DDF-938BF2196DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45A52037-1554-4A01-B85A-56353B22DA9A}
+	EndGlobalSection
+EndGlobal
