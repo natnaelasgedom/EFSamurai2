@@ -3,14 +3,16 @@ using EFSamurai.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EFSamurai.Data.Migrations
 {
     [DbContext(typeof(SamraiContext))]
-    partial class SamraiContextModelSnapshot : ModelSnapshot
+    [Migration("20200703135508_Add1-MRelationship")]
+    partial class Add1MRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +40,7 @@ namespace EFSamurai.Data.Migrations
 
                     b.HasIndex("SamuraiID");
 
-                    b.ToTable("Quotes");
+                    b.ToTable("Quote");
                 });
 
             modelBuilder.Entity("EFSamurai.Domain.Samurai", b =>
