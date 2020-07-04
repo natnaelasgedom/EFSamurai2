@@ -15,22 +15,4 @@ namespace EFSamurai.Domain
         public BattleLog MyBattleLog { get; set; }
 
     }
-
-    public class BattleLog
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public int BattleID { get; set; }
-        public Battle Battle { get; set; }
-
-    }
-
-    public class BattleEvent
-    {
-        public int ID { get; set; }
-        public int Order { get; set; }
-        public string Summary { get; set; }
-        public string Description { get; set; }
-
-    }
 }
