@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFSamurai.Data", "EFSamurai.Data\EFSamurai.Data.csproj", "{20825C92-8061-4CED-8DDF-938BF2196DFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSamurai.Domain", "EFSamurai.Domain\EFSamurai.Domain.csproj", "{A2360C49-34DC-4E54-B252-0F463E8A1A6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFSamurai.Domain", "EFSamurai.Domain\EFSamurai.Domain.csproj", "{A2360C49-34DC-4E54-B252-0F463E8A1A6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSamurai.App", "EFSamurai.App\EFSamurai.App.csproj", "{CF3574EB-A69F-4F38-AD58-78BA4E9ECC78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A2360C49-34DC-4E54-B252-0F463E8A1A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2360C49-34DC-4E54-B252-0F463E8A1A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2360C49-34DC-4E54-B252-0F463E8A1A6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF3574EB-A69F-4F38-AD58-78BA4E9ECC78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF3574EB-A69F-4F38-AD58-78BA4E9ECC78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF3574EB-A69F-4F38-AD58-78BA4E9ECC78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF3574EB-A69F-4F38-AD58-78BA4E9ECC78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
