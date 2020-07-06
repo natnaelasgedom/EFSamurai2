@@ -6,7 +6,7 @@ namespace EFSamurai.App
     {
         static void Main(string[] args)
         {
-            
+            Console.WriteLine("Natnael Asgedom");
         }
     }
 }
