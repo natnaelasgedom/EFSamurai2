@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EFSamurai.Domain
 {
@@ -10,5 +11,6 @@ namespace EFSamurai.Domain
         public Hairstyle? HairStyle { get; set; }
         public SecretIdentity MySecretIdentity { get; set; }
         public ICollection<SamuraiBattle> MyBattles { get; set; }
+
     }
 }
