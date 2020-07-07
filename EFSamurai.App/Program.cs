@@ -1,7 +1,11 @@
 ﻿using EFSamurai.Data;
 using EFSamurai.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace EFSamurai.App
 {
@@ -9,7 +13,14 @@ namespace EFSamurai.App
     {
         static void Main(string[] args)
         {
-            AddOneSamurai();
+            //    AddOneSamurai();
+            //    AddSomeSamurais();
+            //    AddSomeBattles();
+            //    AddOneSamuraiWithRelatedData();
+            //ClearDatabase();
+            WriteOutList(AllSamuraiNamesWithAliases());
+            using var context = new SamuraiContext();
+
         }
 
         private static void AddOneSamurai()
@@ -136,7 +147,7 @@ namespace EFSamurai.App
                             }
                         }
                     }
-                },
+                }
             };
 
             using (var context = new SamuraiContext())
@@ -148,25 +159,138 @@ namespace EFSamurai.App
 
         private static void AddOneSamuraiWithRelatedData()
         {
+            using var context = new SamuraiContext();
             var samurai = new Samurai
             {
                 Name = "Uzumaki Naruto",
                 MyQuotes = new List<Quote>
                 {
-                    new Quote{ Text = "Live and die with honor.", QuoteStyle = Quality.Awesome},
-                    new Quote{ Text = "This too shall pass.", QuoteStyle = Quality.Cheesy}
-                }, 
+                    new Quote { Text = "Live and die with honor", QuoteStyle = Quality.Awesome },
+                    new Quote { Text = "This too shall pass", QuoteStyle = Quality.Awesome }
+                },
                 HairStyle = Hairstyle.Western,
                 MySecretIdentity = new SecretIdentity
                 {
                     RealName = "Uchiha Sasuke"
+                },
+                SamuraiBattles = new List<SamuraiBattle>()
+                {
+                    new SamuraiBattle
+                    {
+
+                       BattleID = context.Battles.First().ID
+                    }
                 }
             };
+
+            context.Samurais.Add(samurai);
+            context.SaveChanges();
         }
 
         private static void ClearDatabase()
         {
+            
+            using var context = new SamuraiContext();
+            context.RemoveRange(context.Samurais);
+            context.RemoveRange(context.Battles);
+            context.SaveChanges();
 
         }
+
+        private static ICollection<string> ListAllSamuraiNames()
+        {
+            using var context = new SamuraiContext();
+            return context.Samurais.Select(s => s.Name).ToList();
+        }
+
+        private static ICollection<string> ListAllSamuraiNames_OrderByNames()
+        {
+            using var context = new SamuraiContext();
+            return context.Samurais.OrderBy(s => s.Name).Select(p => p.Name).ToList();
+        }
+
+        private static ICollection<string> ListAllSamuraiNames_OrderByIdDescending()
+        {
+            using var context = new SamuraiContext();
+            return context.Samurais.OrderByDescending(s => s.Id).Select(s => s.Name).ToList();
+        }
+
+        private static string FindSamuraiWithRealName(string name)
+        {
+            using var context = new SamuraiContext();
+            if (context.Samurais.Any(s => s.MySecretIdentity.RealName == name))
+            {
+                return $"Found the samurai with the name {name} and his covername is " +
+                    $"{context.Samurais.Where(s => s.MySecretIdentity.RealName == name).Select(s => s.Name).ToList()[0]}";
+            } 
+            return $"Could not find any samurai with the real name {name}";
+        }
+
+        private static ICollection<string> ListAllQuotesOfType(Quality quoteStyle)
+        {
+            using var context = new SamuraiContext();
+            var output = context.Quotes.Where(q => quoteStyle == q.QuoteStyle).Select(q => q.Text).ToList();
+            return output;
+        }
+        private static ICollection<string> ListAllQuotesOfType_WithSamurai(Quality quoteStyle)
+        {
+            var output = new List<string>();
+            using var context = new SamuraiContext();
+            foreach (var quote in context.Quotes.Where(q => quoteStyle == q.QuoteStyle).Include(q => q.Samurai))
+            {
+                output.Add($"{quote.Text} is a {quoteStyle} quote by {quote.Samurai.Name}.");
+            }
+            return output;
+        }
+
+        private static ICollection<string> ListAllBattles(DateTime from, DateTime to, bool? isBrutal)
+        {
+            var output = new List<string>();
+            using var context = new SamuraiContext();
+            var battles = context.Battles.Where(b => DateTime.Compare(b.StartDate, from) > 0 && DateTime.Compare(b.EndDate, to) < 0);
+            foreach (var battle in battles)
+            {
+                if (isBrutal == null || battle.IsBrutal == isBrutal)
+                {
+                    output.Add($"{battle.Name} {(battle.IsBrutal ? "is" : "is not")} a brutal battle within the period.");
+                }
+            }
+            return output;
+        }
+
+        private static ICollection<string> AllSamuraiNamesWithAliases()
+        {
+            var output = new List<string>();
+            using (var context = new SamuraiContext())
+            {
+                var samurais_with_aliases = context.Samurais.Where(s => s.MySecretIdentity.RealName != null)
+                    .Include(s => s.MySecretIdentity);
+                foreach (var samurai in samurais_with_aliases)
+                {
+                    output.Add($"{samurai.Name} alias {samurai.MySecretIdentity.RealName}");
+                }
+            }
+            return output;
+        }
+
+        private static void WriteOutList(ICollection<string> collection)
+        {
+            foreach (var item in collection)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        private static ICollection<string> ListAllBattles_WithLog(DateTime from, DateTime to, bool isBrutal)
+        {
+            ICollection<string> output = new List<string>();
+            using (var context = new SamuraiContext())
+            {
+                var joinedTables = context.Battles.Include(b => b.MyBattleLog).ThenInclude(bl => bl.MyBattleEvents);
+
+            }
+            return output;
+        }
+
     }
 }
