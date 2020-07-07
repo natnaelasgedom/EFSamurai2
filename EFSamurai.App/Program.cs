@@ -19,8 +19,7 @@ namespace EFSamurai.App
             //    AddSomeBattles();
             //    AddOneSamuraiWithRelatedData();
             //ClearDatabase();
-            WriteOutList(ListAllBattles_WithLog(new DateTime(1550,1,1), new DateTime(
-                1620,1,1), true));
+            WriteOutList(GetBattlesForSamurai("Uzumaki Naruto"));
 
         }
 
@@ -289,7 +288,7 @@ namespace EFSamurai.App
             using (var context = new SamuraiContext())
             {
                 var joinedTables = context.Battles
-                    .Where(b => b.StartDate > from && b.EndDate < to && b.IsBrutal == isBrutal)
+                    .Where(b => b.StartDate >= from && b.EndDate <= to && b.IsBrutal == isBrutal)
                     .Include(b => b.MyBattleLog)
                     .ThenInclude(bl => bl.MyBattleEvents);
                 foreach (var battle in joinedTables)
@@ -307,24 +306,71 @@ namespace EFSamurai.App
             return output;
         }
 
-        private static ICollection<SamuraiInfo> getSamuraiInfo()
+        private static ICollection<SamuraiInfo> GetSamuraiInfo()
         {
             var samuraiInfoList = new List<SamuraiInfo>();
             using (var context = new SamuraiContext())
             {
+                var samurais_withSecretID_withBattles = context.Samurais
+                    .Include(s => s.MySecretIdentity)
+                    .Include(s => s.SamuraiBattles)
+                    .ThenInclude(sb => sb.Battle);
+                foreach (var samurai in samurais_withSecretID_withBattles)
+                {
+                    string battlenames = "";
+                    
+                    foreach (var sb in samurai.SamuraiBattles)
+                    {
+                        battlenames += $"{sb.Battle.Name},";
+                    }
 
+                    string realName = samurai.MySecretIdentity == null
+                        ? "Has no alias"
+                        : samurai.MySecretIdentity.RealName;
+
+                    samuraiInfoList.Add(new SamuraiInfo()
+                    {
+                        BattleNames = battlenames, 
+                        RealName = realName,
+                        Name = samurai.Name
+                    });
+                }
             }
-
             return samuraiInfoList;
         }
 
-    }
+        private static void WriteOutList(ICollection<SamuraiInfo> collection)
+        {
+            Console.WriteLine($"{"Name", -20} {"RealName",-20} {"Battles", -20}");
+            Console.WriteLine("------------------------------------------------------------");
+            foreach (var si in collection)
+            {
+                Console.WriteLine($"{si.Name,-20} {si.RealName,-20} {si.BattleNames,-20}");
+            }
+        }
 
-    public class SamuraiInfo
-    {
-        public string Name { get; set; }
-        public string RealName { get; set; }
-        public string BattleNames { get; set; }
+        private static ICollection<string> GetBattlesForSamurai(string samuraiName)
+        {
+            ICollection<string> output = new List<string>();
+            using (var context = new SamuraiContext())
+            {
+                var samurais_with_battles = context.Samurais
+                    .Where(s => s.Name == samuraiName)
+                    .Include(s => s.SamuraiBattles)
+                    .ThenInclude(sb => sb.Battle);
+                foreach (var samurai in samurais_with_battles)
+                {
+                    string s = $"Samurai {samurai.Name} har participated in the following battles: \n" +
+                               $"{"ID", -20} {"Name", -20}\n";
+                    foreach (var sb in samurai.SamuraiBattles)
+                    {
+                        s += $"{sb.BattleID, -20} {sb.Battle.Name, -20}\n";
+                    }
+                    output.Add(s);
+                }
+            }
+            return output;
+        }
 
     }
 }
