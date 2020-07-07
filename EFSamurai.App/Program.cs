@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 
 namespace EFSamurai.App
 {
@@ -18,8 +19,8 @@ namespace EFSamurai.App
             //    AddSomeBattles();
             //    AddOneSamuraiWithRelatedData();
             //ClearDatabase();
-            WriteOutList(AllSamuraiNamesWithAliases());
-            using var context = new SamuraiContext();
+            WriteOutList(ListAllBattles_WithLog(new DateTime(1550,1,1), new DateTime(
+                1620,1,1), true));
 
         }
 
@@ -284,13 +285,46 @@ namespace EFSamurai.App
         private static ICollection<string> ListAllBattles_WithLog(DateTime from, DateTime to, bool isBrutal)
         {
             ICollection<string> output = new List<string>();
+            output.Add("-----------------------------------------------------------------");
             using (var context = new SamuraiContext())
             {
-                var joinedTables = context.Battles.Include(b => b.MyBattleLog).ThenInclude(bl => bl.MyBattleEvents);
-
+                var joinedTables = context.Battles
+                    .Where(b => b.StartDate > from && b.EndDate < to && b.IsBrutal == isBrutal)
+                    .Include(b => b.MyBattleLog)
+                    .ThenInclude(bl => bl.MyBattleEvents);
+                foreach (var battle in joinedTables)
+                {
+                    string s = $"| {"Name of battle",-15} | {battle.Name,-15} \n" +
+                               $"| {"Log name",-15} | {battle.MyBattleLog.Name ?? "No name",-15} \n";
+                    foreach (var battleEvent in battle.MyBattleLog.MyBattleEvents)
+                    {
+                        s += $"| {"Event",-15} | {battleEvent.Summary} (Order: {battleEvent.Order}, Battle: {battle.Name}) \n";
+                    }
+                    output.Add(s);
+                    output.Add("-----------------------------------------------------------------");
+                }
             }
             return output;
         }
+
+        private static ICollection<SamuraiInfo> getSamuraiInfo()
+        {
+            var samuraiInfoList = new List<SamuraiInfo>();
+            using (var context = new SamuraiContext())
+            {
+
+            }
+
+            return samuraiInfoList;
+        }
+
+    }
+
+    public class SamuraiInfo
+    {
+        public string Name { get; set; }
+        public string RealName { get; set; }
+        public string BattleNames { get; set; }
 
     }
 }
