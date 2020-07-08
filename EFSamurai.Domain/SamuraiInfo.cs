@@ -1,4 +1,4 @@
-﻿namespace EFSamurai.App
+﻿namespace EFSamurai.Domain
 {
     public class SamuraiInfo
     {

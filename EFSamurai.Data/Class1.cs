@@ -1,7 +1,6 @@
 ﻿using EFSamurai.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
 
 namespace EFSamurai.Data
 {
